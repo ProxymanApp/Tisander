@@ -31,7 +31,7 @@ public enum SerializationError: String, Error {
 }
 
 /// Element of JSON structure, can be an array element or a key/value
-internal protocol JSONElement: Value {}
+public protocol JSONElement: Value {}
 
 /// Any value for JSON, can be Object, array, number, string, boolean or null
 public protocol Value {
@@ -50,7 +50,7 @@ public protocol Value {
 }
 
 /// Protocol to provide a string representation of the JSON structure
-internal protocol JSONStringRepresentable {
+public protocol JSONStringRepresentable {
     /**
      String representation of the JSON
      - returns: string with the json sub-value
@@ -121,49 +121,49 @@ extension Bool: Value, JSONStringRepresentable {
      Return the string representation of this boolean
      - returns: either 'true' or 'false'
      */
-    func stringRepresentation() -> String { return self ? "true" : "false" }
+    public func stringRepresentation() -> String { return self ? "true" : "false" }
 }
 extension Int: Value, JSONStringRepresentable {
     /**
      Return the string representation of this integer
      - returns: integer as string
      */
-    func stringRepresentation() -> String { return String(self) }
+    public func stringRepresentation() -> String { return String(self) }
 }
 extension Double: Value, JSONStringRepresentable {
     /**
      Return the string representation of this double precision floating point number
      - returns: double as string. Uses default system number formatter
      */
-    func stringRepresentation() -> String { return String(self) }
+    public func stringRepresentation() -> String { return String(self) }
 }
 extension String: Value, JSONStringRepresentable {
     /**
      Return the string
      - returns: string in quotes
      */
-    func stringRepresentation() -> String { return "\"\(self)\"" }
+    public func stringRepresentation() -> String { return "\"\(self)\"" }
 }
 extension JSON.ArrayElement: JSONElement, JSONStringRepresentable {
     /**
      Return the string representation of this array element
      - returns: string representation of this array element
      */
-    func stringRepresentation() -> String { return "\(self.value.stringRepresentation())" }
+    public func stringRepresentation() -> String { return "\(self.value.stringRepresentation())" }
 }
 extension JSON.ObjectElement: JSONElement, JSONStringRepresentable {
     /**
      Return the string representation of this object
      - returns: string representation of this object with a "key":value
      */
-    func stringRepresentation() -> String { return "\"\(self.key)\":\(self.value.stringRepresentation())" }
+    public func stringRepresentation() -> String { return "\"\(self.key)\":\(self.value.stringRepresentation())" }
 }
 extension JSON.NULL: Value, JSONStringRepresentable {
     /**
      Return the string representation of this null
      - returns: "null"
      */
-    func stringRepresentation() -> String { return "null" }
+    public func stringRepresentation() -> String { return "null" }
 }
 
 extension Array: Value, JSONStringRepresentable where Array.Element: JSONElement {
@@ -171,7 +171,7 @@ extension Array: Value, JSONStringRepresentable where Array.Element: JSONElement
      Return the string representation of this JSON structure
      - returns: string representation of this JSON structure
      */
-    func stringRepresentation() -> String {
+    public func stringRepresentation() -> String {
         if Array.Element.self == JSON.ObjectElement.self {
             return "{\( (self as? [JSON.ObjectElement])?.map { $0.stringRepresentation() }.joined(separator: ",") ?? "" )}"
         } else if Array.Element.self == JSON.ArrayElement.self {
