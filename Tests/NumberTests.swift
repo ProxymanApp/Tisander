@@ -7,7 +7,13 @@
 //
 
 import XCTest
+
+#if os(OSX)
+@testable import Tisander_macOS
+#elseif os(iOS)
 @testable import Tisander
+#endif
+
 
 class NumberTests: TisanderTest {
     func testPositiveInt() {
