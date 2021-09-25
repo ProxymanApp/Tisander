@@ -188,16 +188,27 @@ open class JSON {
     
     /// Array element representation
     public struct ArrayElement {
+
         /// Array element value
-        let value: Value
+        public let value: Value
+
+        public init(value: Value) {
+            self.value = value
+        }
     }
     
     /// Object element representation
     public struct ObjectElement {
+
         /// Object element key
-        let key: String
+        public let key: String
         /// Object element value
-        let value: Value
+        public let value: Value
+
+        public init(key: String, value: Value) {
+            self.key = key
+            self.value = value
+        }
     }
     
     /**
