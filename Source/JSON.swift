@@ -187,16 +187,16 @@ extension Array: Value, JSONStringRepresentable where Array.Element: JSONElement
  */
 open class JSON {
     /// Representation for null value
-    class NULL {}
+    public class NULL {}
     
     /// Array element representation
-    struct ArrayElement {
+    public struct ArrayElement {
         /// Array element value
         let value: Value & JSONStringRepresentable
     }
     
     /// Object element representation
-    struct ObjectElement {
+    public struct ObjectElement {
         /// Object element key
         let key: String
         /// Object element value
