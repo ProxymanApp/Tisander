@@ -47,10 +47,7 @@ public protocol Value {
      - returns: value at index
      */
     subscript(index: Int) -> Value? { get }
-}
 
-/// Protocol to provide a string representation of the JSON structure
-public protocol JSONStringRepresentable {
     /**
      String representation of the JSON
      - returns: string with the json sub-value
@@ -116,49 +113,49 @@ public extension Value {
     }
 }
 
-extension Bool: Value, JSONStringRepresentable {
+extension Bool: Value {
     /**
      Return the string representation of this boolean
      - returns: either 'true' or 'false'
      */
     public func stringRepresentation() -> String { return self ? "true" : "false" }
 }
-extension Int: Value, JSONStringRepresentable {
+extension Int: Value {
     /**
      Return the string representation of this integer
      - returns: integer as string
      */
     public func stringRepresentation() -> String { return String(self) }
 }
-extension Double: Value, JSONStringRepresentable {
+extension Double: Value {
     /**
      Return the string representation of this double precision floating point number
      - returns: double as string. Uses default system number formatter
      */
     public func stringRepresentation() -> String { return String(self) }
 }
-extension String: Value, JSONStringRepresentable {
+extension String: Value {
     /**
      Return the string
      - returns: string in quotes
      */
     public func stringRepresentation() -> String { return "\"\(self)\"" }
 }
-extension JSON.ArrayElement: JSONElement, JSONStringRepresentable {
+extension JSON.ArrayElement: JSONElement {
     /**
      Return the string representation of this array element
      - returns: string representation of this array element
      */
     public func stringRepresentation() -> String { return "\(self.value.stringRepresentation())" }
 }
-extension JSON.ObjectElement: JSONElement, JSONStringRepresentable {
+extension JSON.ObjectElement: JSONElement {
     /**
      Return the string representation of this object
      - returns: string representation of this object with a "key":value
      */
     public func stringRepresentation() -> String { return "\"\(self.key)\":\(self.value.stringRepresentation())" }
 }
-extension JSON.NULL: Value, JSONStringRepresentable {
+extension JSON.NULL: Value {
     /**
      Return the string representation of this null
      - returns: "null"
@@ -166,7 +163,7 @@ extension JSON.NULL: Value, JSONStringRepresentable {
     public func stringRepresentation() -> String { return "null" }
 }
 
-extension Array: Value, JSONStringRepresentable where Array.Element: JSONElement {
+extension Array: Value where Array.Element: JSONElement {
     /**
      Return the string representation of this JSON structure
      - returns: string representation of this JSON structure
@@ -192,7 +189,7 @@ open class JSON {
     /// Array element representation
     public struct ArrayElement {
         /// Array element value
-        let value: Value & JSONStringRepresentable
+        let value: Value
     }
     
     /// Object element representation
@@ -200,7 +197,7 @@ open class JSON {
         /// Object element key
         let key: String
         /// Object element value
-        let value: Value & JSONStringRepresentable
+        let value: Value
     }
     
     /**
@@ -326,7 +323,7 @@ open class JSON {
      - returns: a JSON value
      - throws: `SerializationError`
      */
-    private func valueParser(_ jsonString:String, index: inout String.Index) throws -> (Value & JSONStringRepresentable)? {
+    private func valueParser(_ jsonString:String, index: inout String.Index) throws -> Value? {
         _ = spaceParser(jsonString, index: &index)
         
         guard let value = try elemParser(jsonString, index: &index) else { return nil }
@@ -412,7 +409,7 @@ open class JSON {
      - returns: element
      - throws: `SerializationError`
      */
-    private func elemParser(_ jsonString:String, index: inout String.Index) throws -> (Value & JSONStringRepresentable)? {
+    private func elemParser(_ jsonString:String, index: inout String.Index) throws -> Value? {
         guard index != jsonString.endIndex else { throw SerializationError.unexpectedEndOfFile }
         _ = spaceParser(jsonString, index: &index)
         
@@ -517,7 +514,7 @@ open class JSON {
      - returns: Number value, usually either `Double` or `Int`
      - throws: `SerializationError`
      */
-    private func numberParser(_ jsonString: String, index: inout String.Index) throws -> (Value & JSONStringRepresentable)? {
+    private func numberParser(_ jsonString: String, index: inout String.Index) throws -> Value? {
         let startingIndex = index
         
         // When number is negative i.e. starts with "-"
